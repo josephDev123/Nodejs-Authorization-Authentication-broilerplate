@@ -7,6 +7,8 @@ import {
 } from "../utils/comparePassword";
 import { UserModel } from "../models/Users";
 import { registercredentialValidation } from "../utils/authDataValidation";
+import { isRegisteredEmail } from "../utils/isRegisteredEmail";
+import { isNameAlreadyReqistered } from "../utils/isNameRegistered";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -42,5 +44,43 @@ export const register = async (req: Request, res: Response) => {
     // const user = await newUser().save();
   } catch (error) {
     return res.json({ error: (error as Error).message });
+  }
+};
+
+export const loginController = async (req: Request, res: Response) => {
+  try {
+    const { name, email } = req.body;
+    const validationResult = await registercredentialValidation(name, email);
+
+    if (validationResult.error) {
+      // Handle validation error
+      return res.json({ ValidationError: validationResult.error.message });
+    }
+
+    const new_Email = await isRegisteredEmail(email);
+    if (new_Email === false) {
+      return res.json({
+        error: true,
+        message: "The email is not yet registered",
+      });
+    }
+
+    const checkNameAlreadyReistered = await isNameAlreadyReqistered(name);
+    if (checkNameAlreadyReistered === false) {
+      return res.json({
+        error: true,
+        message: "The name is not yet registered",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "login successful",
+    });
+  } catch (error) {
+    return res.json({
+      error: true,
+      message: (error as Error).message,
+    });
   }
 };

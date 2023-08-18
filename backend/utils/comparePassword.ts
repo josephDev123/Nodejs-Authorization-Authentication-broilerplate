@@ -18,8 +18,8 @@ export const isPasswordAlreadyTaken = async (newPassword: string) => {
 
 export const isEmailAlreadyUsed = async (email: string) => {
   try {
-    const user = await UserModel.findOne({ email: email });
-    if (user) {
+    const isemail = await UserModel.findOne({ email: email });
+    if (isemail) {
       throw new Error();
     }
     return false;

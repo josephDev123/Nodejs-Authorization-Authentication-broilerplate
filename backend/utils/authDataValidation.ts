@@ -1,9 +1,9 @@
 import Joi from "joi";
 
 export const registercredentialValidation = async (
-  name: string,
-  email: string,
-  password: number | string
+  name?: string,
+  email?: string,
+  password?: number | string
 ) => {
   try {
     const schema = Joi.object({

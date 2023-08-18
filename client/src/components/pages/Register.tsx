@@ -1,8 +1,10 @@
 import { Form, Link, useActionData } from "react-router-dom";
+import { AiOutlineEye } from "react-icons/ai";
+import { useState } from "react";
 
 export default function Register() {
   const actionData = useActionData();
-
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   console.log(actionData);
   return (
     <div className="flex flex-col h-screen w-full bg-slate-200 justify-center items-center">
@@ -29,13 +31,17 @@ export default function Register() {
             />
           </div>
 
-          <div className="flex flex-col mt-2">
+          <div className="flex flex-col mt-2 relative">
             <label>Password</label>
             <input
               name="password"
-              type="password"
+              type={`${!showPassword ? "password" : "text"}`}
               className="p-2 border-2 rounded-md outline-none focus:border-green-300 mt-1"
               placeholder="Enter your correct password"
+            />
+            <AiOutlineEye
+              className="absolute right-1 top-11 cursor-pointer"
+              onClick={() => setShowPassword((prev) => !prev)}
             />
           </div>
           <button
