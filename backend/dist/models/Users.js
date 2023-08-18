@@ -9,8 +9,8 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const userSchema = new mongoose_1.default.Schema({
     name: {
         type: String,
-        maxlength: 25,
-        minlength: 5,
+        maxlength: 30,
+        minlength: 2,
         required: true,
     },
     email: {

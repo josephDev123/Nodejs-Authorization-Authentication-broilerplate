@@ -31,13 +31,6 @@ const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
             console.log(`listening on port ${process.env.PORT}`);
         });
         app.use("/auth", authRoute_1.AuthRoute);
-        app.get("/test", (req, res) => {
-            res.cookie("refresh_token", "hello", {
-                secure: true,
-                httpOnly: true,
-            });
-            return res.send("hello");
-        });
     }
     catch (error) {
         console.log(error);
