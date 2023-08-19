@@ -3,6 +3,7 @@ import { dbConnection } from "./db";
 import cors from "cors";
 import dotenv from "dotenv";
 import { AuthRoute } from "./routes/authRoute";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -14,6 +15,8 @@ const app: Express = express();
 
 app.use(cors(corsOption));
 app.use(express.json());
+app.use(cookieParser());
+const allowCredential = Headers;
 
 const startApp = async () => {
   try {

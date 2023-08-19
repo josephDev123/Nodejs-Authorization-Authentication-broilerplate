@@ -9,6 +9,9 @@ import { UserModel } from "../models/Users";
 import { registercredentialValidation } from "../utils/authDataValidation";
 import { isRegisteredEmail } from "../utils/isRegisteredEmail";
 import { isNameAlreadyReqistered } from "../utils/isNameRegistered";
+import jwt from "jsonwebtoken";
+import { string } from "joi";
+import { createToken } from "../utils/createToken";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -50,15 +53,21 @@ export const register = async (req: Request, res: Response) => {
 export const loginController = async (req: Request, res: Response) => {
   try {
     const { name, email } = req.body;
-    const validationResult = await registercredentialValidation(name, email);
+    const validationResult = await registercredentialValidation(
+      name,
+      email,
+      "Password@123"
+    );
 
     if (validationResult.error) {
       // Handle validation error
+      console.log("validation error");
       return res.json({ ValidationError: validationResult.error.message });
     }
 
     const new_Email = await isRegisteredEmail(email);
     if (new_Email === false) {
+      console.log("The email is not yet registered");
       return res.json({
         error: true,
         message: "The email is not yet registered",
@@ -67,11 +76,15 @@ export const loginController = async (req: Request, res: Response) => {
 
     const checkNameAlreadyReistered = await isNameAlreadyReqistered(name);
     if (checkNameAlreadyReistered === false) {
+      console.log("The name is not yet registered");
       return res.json({
         error: true,
         message: "The name is not yet registered",
       });
     }
+
+    const token = await createToken(email);
+    res.cookie("token", token);
 
     return res.json({
       success: true,

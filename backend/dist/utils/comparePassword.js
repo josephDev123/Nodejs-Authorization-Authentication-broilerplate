@@ -30,8 +30,8 @@ const isPasswordAlreadyTaken = (newPassword) => __awaiter(void 0, void 0, void 0
 exports.isPasswordAlreadyTaken = isPasswordAlreadyTaken;
 const isEmailAlreadyUsed = (email) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield Users_1.UserModel.findOne({ email: email });
-        if (user) {
+        const isemail = yield Users_1.UserModel.findOne({ email: email });
+        if (isemail) {
             throw new Error();
         }
         return false;

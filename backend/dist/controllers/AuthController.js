@@ -9,11 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.register = void 0;
+exports.loginController = exports.register = void 0;
 const hashPassword_1 = require("../utils/hashPassword");
 const comparePassword_1 = require("../utils/comparePassword");
 const Users_1 = require("../models/Users");
 const authDataValidation_1 = require("../utils/authDataValidation");
+const isRegisteredEmail_1 = require("../utils/isRegisteredEmail");
+const isNameRegistered_1 = require("../utils/isNameRegistered");
+const createToken_1 = require("../utils/createToken");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, name, password } = req.body;
@@ -44,4 +47,44 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.register = register;
+const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { name, email } = req.body;
+        const validationResult = yield (0, authDataValidation_1.registercredentialValidation)(name, email);
+        if (validationResult.error) {
+            // Handle validation error
+            console.log("validation error");
+            return res.json({ ValidationError: validationResult.error.message });
+        }
+        const new_Email = yield (0, isRegisteredEmail_1.isRegisteredEmail)(email);
+        if (new_Email === false) {
+            console.log("The email is not yet registered");
+            return res.json({
+                error: true,
+                message: "The email is not yet registered",
+            });
+        }
+        const checkNameAlreadyReistered = yield (0, isNameRegistered_1.isNameAlreadyReqistered)(name);
+        if (checkNameAlreadyReistered === false) {
+            console.log("The name is not yet registered");
+            return res.json({
+                error: true,
+                message: "The name is not yet registered",
+            });
+        }
+        const token = yield (0, createToken_1.createToken)(email);
+        console.log(token);
+        return res.json({
+            success: true,
+            message: "login successful",
+        });
+    }
+    catch (error) {
+        return res.json({
+            error: true,
+            message: error.message,
+        });
+    }
+});
+exports.loginController = loginController;
 //# sourceMappingURL=AuthController.js.map
