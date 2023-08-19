@@ -54,7 +54,7 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
         if (validationResult.error) {
             // Handle validation error
             console.log("validation error");
-            return res.json({ ValidationError: validationResult.error.message });
+            return res.json({ error: true, message: validationResult.error.message });
         }
         const new_Email = yield (0, isRegisteredEmail_1.isRegisteredEmail)(email);
         if (new_Email === false) {
