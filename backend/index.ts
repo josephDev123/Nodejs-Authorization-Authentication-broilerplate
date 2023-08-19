@@ -9,6 +9,7 @@ dotenv.config();
 
 const corsOption = {
   origin: "http://localhost:5173",
+  credentials: true,
 };
 
 const app: Express = express();
@@ -16,7 +17,6 @@ const app: Express = express();
 app.use(cors(corsOption));
 app.use(express.json());
 app.use(cookieParser());
-const allowCredential = Headers;
 
 const startApp = async () => {
   try {

@@ -17,13 +17,16 @@ const db_1 = require("./db");
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const authRoute_1 = require("./routes/authRoute");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 dotenv_1.default.config();
 const corsOption = {
     origin: "http://localhost:5173",
+    Credential: true,
 };
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)(corsOption));
 app.use(express_1.default.json());
+app.use((0, cookie_parser_1.default)());
 const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, db_1.dbConnection)();

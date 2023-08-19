@@ -14,10 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const secret = process.env.SECRET;
 const createToken = (email) => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve, reject) => {
-        jsonwebtoken_1.default.sign(email, secret, (err, token) => {
+        jsonwebtoken_1.default.sign(email, process.env.SECRET, (err, token) => {
             if (err) {
                 reject(err);
             }

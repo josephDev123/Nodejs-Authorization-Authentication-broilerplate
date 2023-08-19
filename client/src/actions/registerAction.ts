@@ -21,10 +21,10 @@ export const registerAction = async ({ request }: registerActionProps) => {
     });
 
     const resp = req.data;
-    if (resp.ValidationError) {
+    if (resp.error) {
       // console.log(resp.ValidationError);
-      errorAlert(resp.ValidationError);
-      return resp.ValidationError;
+      errorAlert(resp.message);
+      return resp.message;
     } else {
       console.log(resp.message);
       window.location.href = "/login";

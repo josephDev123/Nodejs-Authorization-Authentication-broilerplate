@@ -1,4 +1,6 @@
 import { axiosInstance } from "../auth.ts/axiosInstance";
+import { errorAlert } from "../utils/errorAlert";
+import { AxiosError } from "axios";
 
 export interface loginActionProps {
   request: Request;
@@ -18,8 +20,24 @@ export const loginAction = async ({ request }: loginActionProps) => {
       data: extractFormData,
     });
     const res = req.data;
-    return null;
+    console.log(res);
+    if (res.error) {
+      errorAlert(res.message);
+      return res.message;
+    }
+    return (window.location.href = "/");
   } catch (error) {
-    throw new Error();
+    const axiosError = error as AxiosError;
+    if (axiosError.request) {
+      errorAlert(axiosError.request);
+      return axiosError.request;
+    }
+
+    if (axiosError.response) {
+      errorAlert(axiosError.response.data);
+      return axiosError.response.data;
+    }
+    errorAlert("Something went wrong");
+    return true;
   }
 };

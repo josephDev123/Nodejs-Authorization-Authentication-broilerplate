@@ -50,7 +50,7 @@ exports.register = register;
 const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email } = req.body;
-        const validationResult = yield (0, authDataValidation_1.registercredentialValidation)(name, email);
+        const validationResult = yield (0, authDataValidation_1.registercredentialValidation)(name, email, "Password@123");
         if (validationResult.error) {
             // Handle validation error
             console.log("validation error");
@@ -73,7 +73,7 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
             });
         }
         const token = yield (0, createToken_1.createToken)(email);
-        console.log(token);
+        res.cookie("token", token);
         return res.json({
             success: true,
             message: "login successful",

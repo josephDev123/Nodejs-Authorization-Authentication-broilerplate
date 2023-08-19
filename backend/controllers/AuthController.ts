@@ -62,7 +62,7 @@ export const loginController = async (req: Request, res: Response) => {
     if (validationResult.error) {
       // Handle validation error
       console.log("validation error");
-      return res.json({ ValidationError: validationResult.error.message });
+      return res.json({ error: true, message: validationResult.error.message });
     }
 
     const new_Email = await isRegisteredEmail(email);
