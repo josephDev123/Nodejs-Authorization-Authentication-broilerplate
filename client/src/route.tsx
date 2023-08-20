@@ -3,6 +3,7 @@ import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import { registerAction } from "./actions/registerAction";
 import { loginAction } from "./actions/loginAction";
+import Otp from "./components/otp/Otp";
 
 export const mainroutes = createBrowserRouter([
   {
@@ -23,5 +24,10 @@ export const mainroutes = createBrowserRouter([
     element: <Register />,
     errorElement: "error",
     action: registerAction,
+  },
+  {
+    path: "/otp",
+    element: <Otp />,
+    errorElement: "error",
   },
 ]);
