@@ -4,6 +4,7 @@ import Register from "./components/pages/Register";
 import { registerAction } from "./actions/registerAction";
 import { loginAction } from "./actions/loginAction";
 import Otp from "./components/otp/Otp";
+import ProfilePic from "./components/Profile-pic/profilePic";
 
 export const mainroutes = createBrowserRouter([
   {
@@ -28,6 +29,12 @@ export const mainroutes = createBrowserRouter([
   {
     path: "/otp",
     element: <Otp />,
+    errorElement: "error",
+  },
+
+  {
+    path: "/profile-pic",
+    element: <ProfilePic />,
     errorElement: "error",
   },
 ]);
