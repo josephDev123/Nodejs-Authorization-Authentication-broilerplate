@@ -4,7 +4,7 @@ import Register from "./components/pages/Register";
 import { registerAction } from "./actions/registerAction";
 import { loginAction } from "./actions/loginAction";
 import Otp from "./components/otp/Otp";
-import ProfilePic from "./components/Profile-pic/profilePic";
+import ProfilePic from "./components/Profile-pic/ProfilePic";
 
 export const mainroutes = createBrowserRouter([
   {

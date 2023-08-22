@@ -31,7 +31,7 @@ export default function ProfilePic() {
       <div className="w-[90%] md:w-1/2 lg:w-2/3 xl:w-3/4 2xl:w-3/5 flex flex-col justify-center items-center">
         <div
           onClick={handleFileClick}
-          className="bg-gray-300 h-96 w-96 flex flex-col justify-center items-center rounded-md cursor-pointer"
+          className="bg-gray-300 w-[90%] h-80 sm:h-96 sm:w-96 flex flex-col justify-center items-center rounded-md cursor-pointer"
         >
           <BsImage />
           Select image

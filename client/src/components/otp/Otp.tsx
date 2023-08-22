@@ -24,8 +24,8 @@ export default function Otp() {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen justify-center">
-      <div className="w-[90%] md:w-1/2 lg:w-2/3 xl:w-3/4 2xl:w-3/5 flex flex-col justify-center items-center">
+    <div className="flex flex-col items-center h-screen justify-center bg-slate-200">
+      <div className="h-96 rounded-md w-[90%] md:w-2/3 lg:w-1/2 xl:w-2/5 2xl:w-1/4 flex flex-col justify-center items-center bg-white">
         <h2 className="font-extrabold text-2xl">Enter code</h2>
         <p className="mb-4">We sent a code to joseph@gmail.com</p>
         <Form action="" method="post">
@@ -39,7 +39,7 @@ export default function Otp() {
               type="text"
               maxLength={1}
               value={value}
-              className="border text-center border-green-300 rounded-md p-2 mx-1 w-14 h-14 focus:outline-none focus:border-2 focus:border-green-300"
+              className="border text-center border-green-300 rounded-md p-2 mx-1 w-10 h-10 md:w-14 md:h-14 focus:outline-none focus:border-2 focus:border-green-300"
             />
           ))}
         </Form>
