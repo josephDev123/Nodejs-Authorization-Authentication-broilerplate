@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 import { dbConnection } from "./db";
 import cors from "cors";
 import dotenv from "dotenv";
-import { AuthRoute } from "./routes/authRoute";
+import { AuthRoute } from "./routes/auths/authRoute";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -21,12 +21,11 @@ app.use(cookieParser());
 const startApp = async () => {
   try {
     await dbConnection();
+    app.use("/auth", AuthRoute);
 
     app.listen(process.env.PORT, () => {
       console.log(`listening on port ${process.env.PORT}`);
     });
-
-    app.use("/auth", AuthRoute);
   } catch (error) {
     console.log(error);
   }

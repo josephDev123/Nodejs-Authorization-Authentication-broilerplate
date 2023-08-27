@@ -30,6 +30,14 @@ const userSchema = new mongoose.Schema<userType>({
   username: {
     type: String,
     unique: true,
+    validate: {
+      validator: function (value: any) {
+        // Alphanumeric with a length between 3 and 20 characters
+        return /^[a-zA-Z0-9]{3,20}$/.test(value);
+      },
+      message: (props) =>
+        `${props.value} is not a valid username. Must be alphanumeric and between 3 to 20 characters.`,
+    },
   },
 });
 
