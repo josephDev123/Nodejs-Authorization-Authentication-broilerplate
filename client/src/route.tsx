@@ -3,8 +3,10 @@ import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import { registerAction } from "./actions/registerAction";
 import { loginAction } from "./actions/loginAction";
-import Otp from "./components/otp/Otp";
-import ProfilePic from "./components/Profile-pic/ProfilePic";
+import Otp from "./components/pages/otp/Otp";
+import ProfilePic from "./components/pages/Profile-pic/ProfilePic";
+import Describe from "./components/pages/Describe";
+import SetUsername from "./components/pages/setUsername/SetUsername";
 
 export const mainroutes = createBrowserRouter([
   {
@@ -35,6 +37,17 @@ export const mainroutes = createBrowserRouter([
   {
     path: "/profile-pic",
     element: <ProfilePic />,
+    errorElement: "error",
+  },
+  {
+    path: "/describe",
+    element: <Describe />,
+    errorElement: "error",
+  },
+
+  {
+    path: "/set-username",
+    element: <SetUsername />,
     errorElement: "error",
   },
 ]);

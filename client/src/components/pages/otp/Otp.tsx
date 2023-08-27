@@ -43,7 +43,21 @@ export default function Otp() {
             />
           ))}
         </Form>
+        <button className="mt-2 text-customGreen font-medium">
+          Resend code
+        </button>
       </div>
     </div>
   );
 }
+
+// registration
+// 1. what should we call u(username)?
+// 2 Otp
+// 3.
+
+// after login
+// 1. set profile pic
+// 2. where do you live
+// 3. pick theme
+// 4. describe yourself
