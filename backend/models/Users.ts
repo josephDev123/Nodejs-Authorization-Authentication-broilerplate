@@ -3,6 +3,7 @@ type userType = {
   name: string;
   email: string;
   password: string;
+  username: string;
 };
 //user schema
 
@@ -21,6 +22,12 @@ const userSchema = new mongoose.Schema<userType>({
   },
 
   password: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+
+  username: {
     type: String,
     required: true,
     unique: true,

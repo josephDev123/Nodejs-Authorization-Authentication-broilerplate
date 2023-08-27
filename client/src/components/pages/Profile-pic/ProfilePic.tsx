@@ -27,11 +27,11 @@ export default function ProfilePic() {
   };
 
   return (
-    <div className="flex flex-col items-center h-screen justify-center">
-      <div className="w-[90%] md:w-1/2 lg:w-2/3 xl:w-3/4 2xl:w-3/5 flex flex-col justify-center items-center">
+    <div className="flex flex-col items-center h-screen justify-center bg-slate-200">
+      <div className="h-80 rounded-md bg-white w-[90%] md:w-2/3 lg:w-1/2 xl:w-2/5 2xl:w-1/4 flex flex-col justify-center items-center">
         <div
           onClick={handleFileClick}
-          className="bg-gray-300 w-[90%] h-80 sm:h-96 sm:w-96 flex flex-col justify-center items-center rounded-md cursor-pointer"
+          className=" flex flex-col justify-center items-center cursor-pointer"
         >
           <BsImage />
           Select image
