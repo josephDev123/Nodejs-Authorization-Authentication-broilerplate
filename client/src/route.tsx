@@ -7,6 +7,7 @@ import Otp from "./components/pages/otp/Otp";
 import ProfilePic from "./components/pages/Profile-pic/ProfilePic";
 import Describe from "./components/pages/Describe";
 import SetUsername from "./components/pages/setUsername/SetUsername";
+import Theme from "./components/pages/theme/Theme";
 
 export const mainroutes = createBrowserRouter([
   {
@@ -48,6 +49,12 @@ export const mainroutes = createBrowserRouter([
   {
     path: "/set-username",
     element: <SetUsername />,
+    errorElement: "error",
+  },
+
+  {
+    path: "/set-theme",
+    element: <Theme />,
     errorElement: "error",
   },
 ]);

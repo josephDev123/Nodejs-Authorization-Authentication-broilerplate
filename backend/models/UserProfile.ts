@@ -19,6 +19,8 @@ interface IUserProfile extends Document {
   accountBalance: number;
   //   transactions: Types.ObjectId[];
   //   linkedBankAccounts: Types.ObjectId[];
+  staging: number;
+  status: boolean;
 }
 
 const userProfileSchema = new Schema<IUserProfile>(
@@ -65,6 +67,11 @@ const userProfileSchema = new Schema<IUserProfile>(
       type: Number,
       default: 0,
     },
+    staging: {
+      type: Number,
+      default: 0,
+    },
+    status: Boolean,
     // transactions: [
     //   {
     //     type: Schema.Types.ObjectId,
@@ -79,6 +86,7 @@ const userProfileSchema = new Schema<IUserProfile>(
     // ],
     // Add more fields as needed
   },
+
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
   }

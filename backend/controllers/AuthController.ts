@@ -12,6 +12,7 @@ import { isNameAlreadyReqistered } from "../utils/isNameRegistered";
 import jwt from "jsonwebtoken";
 import { string } from "joi";
 import { createToken } from "../utils/createToken";
+import UserProfile from "../models/UserProfile";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -34,17 +35,18 @@ export const register = async (req: Request, res: Response) => {
     // console.log(isPasswordAlreadyUsed, isEmailUsed, hashedPassword);
 
     if (isPasswordAlreadyUsed === false && isEmailUsed === false) {
-      const newUser = await UserModel.insertMany({
+      const newUser = new UserModel({
         name: name,
         email: email,
         password: hashedPassword,
       });
+      await newUser.save();
+      return res.status(201).json({
+        message: "New user created",
+      });
     }
+    console.log("already register");
     //secure:true, httpOnly:true
-    return res.status(201).json({
-      message: "New user created",
-    });
-    // const user = await newUser().save();
   } catch (error) {
     return res.json({ error: (error as Error).message });
   }
@@ -74,21 +76,24 @@ export const loginController = async (req: Request, res: Response) => {
       });
     }
 
-    const checkNameAlreadyReistered = await isNameAlreadyReqistered(name);
-    if (checkNameAlreadyReistered === false) {
+    const checkNameAlreadyRegistered = await isNameAlreadyReqistered(name);
+    if (checkNameAlreadyRegistered === false) {
       console.log("The name is not yet registered");
       return res.json({
         error: true,
         message: "The name is not yet registered",
       });
     }
-
     const token = await createToken(email);
+    const user = await UserModel.findOne({ email });
+
+    console.log(user);
+
     res.cookie("token", token);
 
     return res.json({
       success: true,
-      message: "login successful",
+      message: user,
     });
   } catch (error) {
     return res.json({

@@ -1,9 +1,12 @@
-import mongoose, { Model } from "mongoose";
+import mongoose, { Document, Schema, Types } from "mongoose";
+
 type userType = {
   name: string;
   email: string;
   password: string;
   username: string;
+  profile: Types.ObjectId;
+  confirm_otp: boolean;
 };
 //user schema
 
@@ -23,7 +26,7 @@ const userSchema = new mongoose.Schema<userType>({
 
   password: {
     type: String,
-    required: true,
+    // required: true,
     unique: true,
   },
 
@@ -39,6 +42,11 @@ const userSchema = new mongoose.Schema<userType>({
         `${props.value} is not a valid username. Must be alphanumeric and between 3 to 20 characters.`,
     },
   },
+  profile: {
+    type: Schema.Types.ObjectId,
+    ref: "UserProfile",
+  },
+  confirm_otp: Boolean,
 });
 
 //user model
