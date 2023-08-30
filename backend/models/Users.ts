@@ -5,7 +5,7 @@ type userType = {
   email: string;
   password: string;
   username: string;
-  profile: Types.ObjectId;
+  profile_id: Types.ObjectId;
   confirm_otp: boolean;
 };
 //user schema
@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema<userType>({
         `${props.value} is not a valid username. Must be alphanumeric and between 3 to 20 characters.`,
     },
   },
-  profile: {
+  profile_id: {
     type: Schema.Types.ObjectId,
     ref: "UserProfile",
   },

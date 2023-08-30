@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
 
 interface IUserProfile extends Document {
-  user: Types.ObjectId;
+  user_id: Types.ObjectId;
   fullName: string;
   //   email: string;
   phoneNumber: string;
@@ -25,7 +25,7 @@ interface IUserProfile extends Document {
 
 const userProfileSchema = new Schema<IUserProfile>(
   {
-    user: {
+    user_id: {
       type: Schema.Types.ObjectId,
       ref: "User", // Reference to the User model
       required: true,
@@ -33,7 +33,7 @@ const userProfileSchema = new Schema<IUserProfile>(
     },
     fullName: {
       type: String,
-      required: true,
+      // required: true,
     },
     // email: {
     //   type: String,
@@ -44,7 +44,7 @@ const userProfileSchema = new Schema<IUserProfile>(
     // },
     phoneNumber: {
       type: String,
-      required: true,
+      // required: true,
     },
     Bio: {
       type: String,
@@ -59,7 +59,7 @@ const userProfileSchema = new Schema<IUserProfile>(
     },
     dateOfBirth: {
       type: Date,
-      required: true,
+      // required: true,
     },
     photo: String,
     identification: String,

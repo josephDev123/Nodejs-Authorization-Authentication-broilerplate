@@ -13,42 +13,65 @@ import jwt from "jsonwebtoken";
 import { string } from "joi";
 import { createToken } from "../utils/createToken";
 import UserProfile from "../models/UserProfile";
+import mongoose from "mongoose";
 
 export const register = async (req: Request, res: Response) => {
+  const session = await mongoose.startSession();
+
   try {
-    const { email, name, password } = req.body;
-    const hashedPassword = await hashPassword(password);
-    const isPasswordAlreadyUsed = await isPasswordAlreadyTaken(password);
-    const isEmailUsed = await isEmailAlreadyUsed(email);
+    const transactions = await session.withTransaction(async () => {
+      const { email, name, password } = req.body;
+      const hashedPassword = await hashPassword(password);
+      const isPasswordAlreadyUsed = await isPasswordAlreadyTaken(password);
+      const isEmailUsed = await isEmailAlreadyUsed(email);
 
-    const validationResult = await registercredentialValidation(
-      name,
-      email,
-      password
-    );
+      const validationResult = await registercredentialValidation(
+        name,
+        email,
+        password
+      );
 
-    if (validationResult.error) {
-      // Handle validation error
-      return res.json({ ValidationError: validationResult.error.message });
+      if (validationResult.error) {
+        // Handle validation error
+        return res.json({
+          error: true,
+          ValidationError: validationResult.error.message,
+        });
+      }
+
+      // console.log(isPasswordAlreadyUsed, isEmailUsed, hashedPassword);
+
+      if (isPasswordAlreadyUsed === false && isEmailUsed === false) {
+        const newUser = new UserModel({
+          name: name,
+          email: email,
+          password: hashedPassword,
+        });
+        const user = await newUser.save({ session });
+        const userProfile = new UserProfile({
+          user_id: user._id,
+        });
+        await userProfile.save({ session });
+        await session.commitTransaction();
+        session.endSession();
+        return res.status(201).json({
+          error: false,
+          message: "New user created",
+        });
+      } else {
+        session.endSession();
+        console.log("Already registered");
+      }
+      console.log("already register");
+    }); //secure:true, httpOnly:true\
+
+    if (transactions) {
+      console.log("The transaction was successful");
     }
-
-    // console.log(isPasswordAlreadyUsed, isEmailUsed, hashedPassword);
-
-    if (isPasswordAlreadyUsed === false && isEmailUsed === false) {
-      const newUser = new UserModel({
-        name: name,
-        email: email,
-        password: hashedPassword,
-      });
-      await newUser.save();
-      return res.status(201).json({
-        message: "New user created",
-      });
-    }
-    console.log("already register");
-    //secure:true, httpOnly:true
   } catch (error) {
-    return res.json({ error: (error as Error).message });
+    // await session.abortTransaction();
+    session.endSession();
+    return res.json({ error: true, message: (error as Error).message });
   }
 };
 
@@ -85,15 +108,16 @@ export const loginController = async (req: Request, res: Response) => {
       });
     }
     const token = await createToken(email);
-    const user = await UserModel.findOne({ email });
-
-    console.log(user);
+    const user_id = await UserModel.findOne({ email }, "_id");
+    const userProfile = await UserProfile.findOne({
+      user_id: user_id?._id,
+    }).populate("user_id");
 
     res.cookie("token", token);
 
     return res.json({
       success: true,
-      message: user,
+      message: userProfile,
     });
   } catch (error) {
     return res.json({
