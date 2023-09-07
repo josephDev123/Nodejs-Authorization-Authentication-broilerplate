@@ -14,8 +14,14 @@ import { string } from "joi";
 import { createToken } from "../utils/createToken";
 import UserProfile from "../models/UserProfile";
 import mongoose from "mongoose";
+import { profile } from "console";
+import { randomBytes, randomUUID } from "crypto";
+import { sendMail } from "../utils/sendMail";
+import { generateRandomPIN } from "../utils/generateRandomPin";
 
 export const register = async (req: Request, res: Response) => {
+  const Otp = randomUUID();
+  console.log(Otp);
   const session = await mongoose.startSession();
 
   try {
@@ -48,12 +54,39 @@ export const register = async (req: Request, res: Response) => {
           password: hashedPassword,
         });
         const user = await newUser.save({ session });
+
         const userProfile = new UserProfile({
           user_id: user._id,
         });
         await userProfile.save({ session });
+
+        const newUserWithProfile = await UserModel.updateOne(
+          { _id: user._id },
+          { profile: userProfile._id }
+        ).session(session);
+
         await session.commitTransaction();
+
+        const userAndProfile = await UserModel.findOne().populate("profile");
+        console.log(userAndProfile);
+
         session.endSession();
+
+        // send otp to mail
+        const otp = generateRandomPIN;
+        const payload = { email: email, otp: otp };
+        const messageId = await sendMail(payload);
+
+        if (messageId) {
+          // Email sent successfully
+          alert("Email sent successfully!");
+        } else {
+          // Handle the case where sending the email failed
+          res
+            .status(500)
+            .json({ error: true, message: "Failed to send email" });
+        }
+
         return res.status(201).json({
           error: false,
           message: "New user created",
@@ -63,7 +96,7 @@ export const register = async (req: Request, res: Response) => {
         console.log("Already registered");
       }
       console.log("already register");
-    }); //secure:true, httpOnly:true\
+    }); //secure:true, httpOnly:true
 
     if (transactions) {
       console.log("The transaction was successful");

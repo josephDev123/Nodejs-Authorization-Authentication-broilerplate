@@ -5,8 +5,11 @@ type userType = {
   email: string;
   password: string;
   username: string;
-  profile_id: Types.ObjectId;
+  profile: Types.ObjectId;
+  otp: number;
   confirm_otp: boolean;
+  staging: number;
+  status: boolean;
 };
 //user schema
 
@@ -42,11 +45,17 @@ const userSchema = new mongoose.Schema<userType>({
         `${props.value} is not a valid username. Must be alphanumeric and between 3 to 20 characters.`,
     },
   },
-  profile_id: {
+
+  profile: {
     type: Schema.Types.ObjectId,
     ref: "UserProfile",
   },
-  confirm_otp: Boolean,
+
+  otp: Number,
+
+  confirm_otp: { type: Boolean, default: false },
+
+  staging: { type: Number, default: 0 },
 });
 
 //user model
