@@ -20,8 +20,6 @@ import { sendMail } from "../utils/sendMail";
 import { generateRandomPIN } from "../utils/generateRandomPin";
 
 export const register = async (req: Request, res: Response) => {
-  const Otp = randomUUID();
-  console.log(Otp);
   const session = await mongoose.startSession();
 
   try {
@@ -41,6 +39,7 @@ export const register = async (req: Request, res: Response) => {
         // Handle validation error
         return res.json({
           error: true,
+          show: true,
           ValidationError: validationResult.error.message,
         });
       }
@@ -65,37 +64,50 @@ export const register = async (req: Request, res: Response) => {
           { profile: userProfile._id }
         ).session(session);
 
-        await session.commitTransaction();
-
         const userAndProfile = await UserModel.findOne().populate("profile");
-        console.log(userAndProfile);
+
+        // send otp to mail
+        const otp = generateRandomPIN();
+        const payload = { email: email, otp: otp };
+        // const messageId = await sendMail(payload);
+        const updatedValue = `${otp}`;
+        const storedOtp = await UserModel.updateOne(
+          { _id: user._id },
+          { otp: updatedValue }
+        ).session(session);
+
+        if (storedOtp) {
+          // Email sent successfully
+          await sendMail(payload);
+          console.log("Email sent successfully!");
+        } else {
+          // Handle the case where sending the email failed
+          console.log("Failed to send otp email");
+          res.status(500).json({
+            error: true,
+            show: true,
+            message: "Failed to send otp email",
+          });
+        }
+
+        await session.commitTransaction();
 
         session.endSession();
 
-        // send otp to mail
-        const otp = generateRandomPIN;
-        const payload = { email: email, otp: otp };
-        const messageId = await sendMail(payload);
-
-        if (messageId) {
-          // Email sent successfully
-          alert("Email sent successfully!");
-        } else {
-          // Handle the case where sending the email failed
-          res
-            .status(500)
-            .json({ error: true, message: "Failed to send email" });
-        }
-
         return res.status(201).json({
           error: false,
+          show: true,
           message: "New user created",
         });
       } else {
         session.endSession();
         console.log("Already registered");
+        return res.status(400).json({
+          error: true,
+          show: true,
+          message: "Already registered",
+        });
       }
-      console.log("already register");
     }); //secure:true, httpOnly:true
 
     if (transactions) {
@@ -103,8 +115,13 @@ export const register = async (req: Request, res: Response) => {
     }
   } catch (error) {
     // await session.abortTransaction();
+    console.log("Oops");
     session.endSession();
-    return res.json({ error: true, message: (error as Error).message });
+    return res.json({
+      error: true,
+      show: false,
+      message: (error as Error).message,
+    });
   }
 };
 

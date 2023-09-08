@@ -17,10 +17,11 @@ const transporter = nodemailer.createTransport(smtpConfig);
 export const sendMail = async ({ otp, email }: { otp: any; email: any }) => {
   try {
     const info = await transporter.sendMail({
-      from: "Joseph Uzuegbu Fintech",
+      from: "JosephUzuegbu@gmail.com",
       to: email,
       subject: "Confirmation OTP",
       text: otp,
+      html: `<p>Pls don't expose this otp: ${otp}</p>`,
     });
     return info.messageId;
   } catch (error) {

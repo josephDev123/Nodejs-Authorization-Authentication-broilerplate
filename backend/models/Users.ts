@@ -6,7 +6,7 @@ type userType = {
   password: string;
   username: string;
   profile: Types.ObjectId;
-  otp: number;
+  otp: string;
   confirm_otp: boolean;
   staging: number;
   status: boolean;
@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema<userType>({
     ref: "UserProfile",
   },
 
-  otp: Number,
+  otp: String,
 
   confirm_otp: { type: Boolean, default: false },
 
