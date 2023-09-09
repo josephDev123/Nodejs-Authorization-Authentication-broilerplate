@@ -21,13 +21,13 @@ export const registerAction = async ({ request }: registerActionProps) => {
     });
 
     const resp = req.data;
-    if (resp.error) {
-      // console.log(resp.ValidationError);
+    if (resp.error && resp.showMessage) {
       errorAlert(resp.message);
       return resp.message;
     } else {
       console.log(resp.message);
-      window.location.href = "/login";
+      localStorage.setItem("user", JSON.stringify(resp.data));
+      window.location.href = "/otp";
       return null;
     }
   } catch (error) {

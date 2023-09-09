@@ -39,8 +39,8 @@ export const register = async (req: Request, res: Response) => {
         // Handle validation error
         return res.json({
           error: true,
-          show: true,
-          ValidationError: validationResult.error.message,
+          showMessage: true,
+          message: validationResult.error.message,
         });
       }
 
@@ -64,8 +64,6 @@ export const register = async (req: Request, res: Response) => {
           { profile: userProfile._id }
         ).session(session);
 
-        const userAndProfile = await UserModel.findOne().populate("profile");
-
         // send otp to mail
         const otp = generateRandomPIN();
         const payload = { email: email, otp: otp };
@@ -82,13 +80,20 @@ export const register = async (req: Request, res: Response) => {
           console.log("Email sent successfully!");
         } else {
           // Handle the case where sending the email failed
+
           console.log("Failed to send otp email");
-          res.status(500).json({
+          return res.status(500).json({
             error: true,
-            show: true,
+            showMessage: true,
             message: "Failed to send otp email",
           });
         }
+
+        const userAndProfile = await UserModel.findOne({ email })
+          // .populate("profile")
+          .session(session);
+
+        console.log(userAndProfile);
 
         await session.commitTransaction();
 
@@ -96,15 +101,16 @@ export const register = async (req: Request, res: Response) => {
 
         return res.status(201).json({
           error: false,
-          show: true,
+          showMessage: true,
           message: "New user created",
+          data: userAndProfile,
         });
       } else {
         session.endSession();
         console.log("Already registered");
         return res.status(400).json({
           error: true,
-          show: true,
+          showMessage: true,
           message: "Already registered",
         });
       }
@@ -119,7 +125,7 @@ export const register = async (req: Request, res: Response) => {
     session.endSession();
     return res.json({
       error: true,
-      show: false,
+      showMessage: false,
       message: (error as Error).message,
     });
   }
@@ -175,4 +181,8 @@ export const loginController = async (req: Request, res: Response) => {
       message: (error as Error).message,
     });
   }
+};
+
+export const Otp = (req: Request, res: Response) => {
+  console.log("otp");
 };
