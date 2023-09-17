@@ -92,9 +92,9 @@ export const register = async (req: Request, res: Response) => {
         const userAndProfile = await UserModel.findOne({ email })
           // .populate("profile")
           .session(session);
+        const userAndProfileJSON = JSON.stringify(userAndProfile);
 
-        console.log(userAndProfile);
-
+        res.cookie("user", userAndProfileJSON);
         await session.commitTransaction();
 
         session.endSession();
@@ -103,7 +103,7 @@ export const register = async (req: Request, res: Response) => {
           error: false,
           showMessage: true,
           message: "New user created",
-          data: userAndProfile,
+          // data: userAndProfile,
         });
       } else {
         session.endSession();
@@ -183,6 +183,6 @@ export const loginController = async (req: Request, res: Response) => {
   }
 };
 
-export const Otp = (req: Request, res: Response) => {
+export const SendOtp = (req: Request, res: Response) => {
   console.log("otp");
 };

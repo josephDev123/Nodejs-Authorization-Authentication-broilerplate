@@ -1,8 +1,20 @@
 import { Form } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getCookie } from "../../../utils/getCookie";
+import Cookies from "js-cookie";
 
 export default function Otp() {
   const [pins, setPins] = useState(Array(7).fill(""));
+  const [email, setEmail] = useState("");
+  useEffect(() => {
+    const user = Cookies.get("user");
+    if (user) {
+      const userJson = JSON.parse(user);
+      setEmail(userJson.email);
+      console.log(userJson.email);
+    }
+  }, []);
+
   const handleChangeInput = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -27,7 +39,7 @@ export default function Otp() {
     <div className="flex flex-col items-center h-screen justify-center bg-slate-200">
       <div className="h-96 rounded-md w-[90%] md:w-2/3 lg:w-1/2 xl:w-2/5 2xl:w-1/4 flex flex-col justify-center items-center bg-white">
         <h2 className="font-extrabold text-2xl">Enter code</h2>
-        <p className="mb-4">We sent a code to joseph@gmail.com</p>
+        <p className="mb-4">We sent a code to {email}</p>
         <Form action="" method="post">
           {pins.map((value, index) => (
             <input

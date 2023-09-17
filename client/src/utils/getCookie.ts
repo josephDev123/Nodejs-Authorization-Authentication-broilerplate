@@ -1,6 +1,6 @@
 export function getCookie(cookieName: string) {
   const cookieString = decodeURIComponent(document.cookie);
-  //   console.log(cookieString);
+  console.log(cookieString);
   const cookies = cookieString.split("; ");
 
   for (const cookie of cookies) {

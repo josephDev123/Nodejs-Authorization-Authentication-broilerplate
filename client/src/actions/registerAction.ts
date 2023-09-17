@@ -26,7 +26,7 @@ export const registerAction = async ({ request }: registerActionProps) => {
       return resp.message;
     } else {
       console.log(resp.message);
-      localStorage.setItem("user", JSON.stringify(resp.data));
+      // localStorage.setItem("user", JSON.stringify(resp.data));
       window.location.href = "/otp";
       return null;
     }
