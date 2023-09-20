@@ -21,14 +21,15 @@ export const registerAction = async ({ request }: registerActionProps) => {
     });
 
     const resp = req.data;
+
     if (resp.error && resp.showMessage) {
       errorAlert(resp.message);
-      return resp.message;
-    } else {
-      console.log(resp.message);
-      // localStorage.setItem("user", JSON.stringify(resp.data));
-      window.location.href = "/otp";
       return null;
+    } else if (resp.error || resp.showMessage == false) {
+      errorAlert("Something went wrong");
+      return null;
+    } else {
+      return (window.location.href = "/confirm-otp");
     }
   } catch (error) {
     const axiosError = error as AxiosError;

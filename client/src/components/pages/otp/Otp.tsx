@@ -1,11 +1,13 @@
 import { Form } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getCookie } from "../../../utils/getCookie";
 import Cookies from "js-cookie";
+import { useActionData } from "react-router-dom";
 
 export default function Otp() {
   const [pins, setPins] = useState(Array(7).fill(""));
   const [email, setEmail] = useState("");
+  const data = useActionData();
+  console.log(data);
   useEffect(() => {
     const user = Cookies.get("user");
     if (user) {
@@ -40,7 +42,8 @@ export default function Otp() {
       <div className="h-96 rounded-md w-[90%] md:w-2/3 lg:w-1/2 xl:w-2/5 2xl:w-1/4 flex flex-col justify-center items-center bg-white">
         <h2 className="font-extrabold text-2xl">Enter code</h2>
         <p className="mb-4">We sent a code to {email}</p>
-        <Form action="" method="post">
+        <p></p>
+        <Form action="/confirm-otp" method="post">
           {pins.map((value, index) => (
             <input
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -54,10 +57,19 @@ export default function Otp() {
               className="border text-center border-green-300 rounded-md p-2 mx-1 w-10 h-10 md:w-14 md:h-14 focus:outline-none focus:border-2 focus:border-green-300"
             />
           ))}
+          <input name="data" type="hidden" value={pins} />
+          <div className="flex gap-4 mt-3">
+            <button
+              type="submit"
+              className="mt-2 text-customGreen font-medium block border rounded-md p-2"
+            >
+              Send code
+            </button>
+            <button className="mt-2 text-customGreen font-medium">
+              Resend code
+            </button>
+          </div>
         </Form>
-        <button className="mt-2 text-customGreen font-medium">
-          Resend code
-        </button>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import { registerAction } from "./actions/registerAction";
 import { loginAction } from "./actions/loginAction";
+import { ConfirmOtp } from "./actions/confirmOtp";
 import Otp from "./components/pages/otp/Otp";
 import ProfilePic from "./components/pages/Profile-pic/ProfilePic";
 import Describe from "./components/pages/Describe";
@@ -30,9 +31,10 @@ export const mainroutes = createBrowserRouter([
     action: registerAction,
   },
   {
-    path: "/otp",
+    path: "/confirm-otp",
     element: <Otp />,
     errorElement: "error",
+    action: ConfirmOtp,
   },
 
   {

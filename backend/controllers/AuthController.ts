@@ -183,6 +183,43 @@ export const loginController = async (req: Request, res: Response) => {
   }
 };
 
-export const SendOtp = (req: Request, res: Response) => {
-  console.log("otp");
+export const ConfirmOtp = async (req: Request, res: Response) => {
+  try {
+    const { otp, email } = req.body;
+    const formatOtp = otp.split(",").join("");
+    // console.log(formatOtp);
+
+    const confirmOtp = await UserModel.findOne({
+      email: email,
+      otp: formatOtp,
+    });
+
+    // console.log(confirmOtp);
+
+    if (!confirmOtp) {
+      return res.status(500).json({
+        error: true,
+        showMessage: true,
+        message: "User/Otp not found",
+      });
+    } else {
+      const updatedUser = await UserModel.findOneAndUpdate(
+        { email: email },
+        { confirm_otp: true },
+        { new: false } // This option returns the updated document
+      );
+      console.log(updatedUser);
+      res.cookie("user", JSON.stringify(updatedUser));
+
+      return res
+        .status(200)
+        .json({ error: false, showMessage: true, message: "Otp confirm" });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      showMessage: false,
+      message: (error as Error).message,
+    });
+  }
 };
