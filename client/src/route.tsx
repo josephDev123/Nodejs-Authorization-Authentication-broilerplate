@@ -18,13 +18,6 @@ export const mainroutes = createBrowserRouter([
   },
 
   {
-    path: "/login",
-    element: <Login />,
-    errorElement: "error",
-    action: loginAction,
-  },
-
-  {
     path: "/register",
     element: <Register />,
     errorElement: "error",
@@ -35,6 +28,13 @@ export const mainroutes = createBrowserRouter([
     element: <Otp />,
     errorElement: "error",
     action: ConfirmOtp,
+  },
+
+  {
+    path: "/login",
+    element: <Login />,
+    errorElement: "error",
+    action: loginAction,
   },
 
   {

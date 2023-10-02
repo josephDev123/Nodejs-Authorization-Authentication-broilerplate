@@ -143,14 +143,23 @@ export const loginController = async (req: Request, res: Response) => {
     if (validationResult.error) {
       // Handle validation error
       console.log("validation error");
-      return res.json({ error: true, message: validationResult.error.message });
+      return res.json({
+        error: true,
+        showMessage: true,
+        message: validationResult.error.message,
+      });
     }
+
+    // error: true,
+    // showMessage: false,
+    // message: (error as Error).message,
 
     const new_Email = await isRegisteredEmail(email);
     if (new_Email === false) {
       console.log("The email is not yet registered");
       return res.json({
         error: true,
+        showMessage: true,
         message: "The email is not yet registered",
       });
     }
@@ -160,24 +169,38 @@ export const loginController = async (req: Request, res: Response) => {
       console.log("The name is not yet registered");
       return res.json({
         error: true,
+        showMessage: true,
         message: "The name is not yet registered",
       });
     }
     const token = await createToken(email);
-    const user_id = await UserModel.findOne({ email }, "_id");
-    const userProfile = await UserProfile.findOne({
-      user_id: user_id?._id,
-    }).populate("user_id");
+    // const user_id = await UserModel.findOne({ email }, "_id");
+    // const userProfile = await UserProfile.findOne({
+    //   user_id: user_id?._id,
+    // }).populate("user_id");
+
+    const user = await UserModel.findOne({ email: new_Email });
+
+    // check whether the user is real by checking for OTP status
+    if (!user?.confirm_otp) {
+      return res.json({
+        error: true,
+        showMessage: true,
+        message: "Otp unconfirmed",
+      });
+    }
 
     res.cookie("token", token);
-
+    res.cookie("user", JSON.stringify(user));
     return res.json({
       success: true,
-      message: userProfile,
+      showMessage: false,
+      message: "login successful",
     });
   } catch (error) {
     return res.json({
       error: true,
+      showMessage: false,
       message: (error as Error).message,
     });
   }
