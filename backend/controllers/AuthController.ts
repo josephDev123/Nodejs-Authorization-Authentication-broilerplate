@@ -14,7 +14,7 @@ import { string } from "joi";
 import { createToken } from "../utils/createToken";
 import UserProfile from "../models/UserProfile";
 import mongoose from "mongoose";
-import { profile } from "console";
+import { Console, log, profile } from "console";
 import { randomBytes, randomUUID } from "crypto";
 import { sendMail } from "../utils/sendMail";
 import { generateRandomPIN } from "../utils/generateRandomPin";
@@ -150,10 +150,6 @@ export const loginController = async (req: Request, res: Response) => {
       });
     }
 
-    // error: true,
-    // showMessage: false,
-    // message: (error as Error).message,
-
     const new_Email = await isRegisteredEmail(email);
     if (new_Email === false) {
       console.log("The email is not yet registered");
@@ -179,10 +175,10 @@ export const loginController = async (req: Request, res: Response) => {
     //   user_id: user_id?._id,
     // }).populate("user_id");
 
-    const user = await UserModel.findOne({ email: new_Email });
+    const user = await UserModel.findOne({ email: email });
 
     // check whether the user is real by checking for OTP status
-    if (!user?.confirm_otp) {
+    if (user?.confirm_otp == false) {
       return res.json({
         error: true,
         showMessage: true,

@@ -21,11 +21,16 @@ export const loginAction = async ({ request }: loginActionProps) => {
     });
     const res = req.data;
     console.log(res);
-    if (res.error) {
+    if (res.error && res.showMessage) {
       errorAlert(res.message);
-      return res.message;
+      return null;
+    } else if (res.error && !res.showMessage) {
+      errorAlert("Something went wrong");
+      return null;
+    } else {
+      return (window.location.href = "/");
     }
-    return (window.location.href = "/");
+    return null;
   } catch (error) {
     const axiosError = error as AxiosError;
     if (axiosError.request) {
