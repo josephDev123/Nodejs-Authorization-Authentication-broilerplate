@@ -9,12 +9,35 @@ import ProfilePic from "./components/pages/Profile-pic/ProfilePic";
 import Describe from "./components/pages/Describe";
 import SetUsername from "./components/pages/setUsername/SetUsername";
 import Theme from "./components/pages/theme/Theme";
+import HomeLayout from "./components/pages/Home/HomeLayout";
+import DashboardLayout from "./components/pages/Dashboard/DashboardLayout";
+import { verifyUserStatus } from "./actions/verifyUserStatus";
 
 export const mainroutes = createBrowserRouter([
   {
     path: "/",
-    element: "welcome",
-    errorElement: "error",
+    element: <HomeLayout />,
+
+    children: [
+      {
+        path: "/",
+        element: "welcome",
+        errorElement: "error",
+      },
+    ],
+  },
+
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    loader: verifyUserStatus,
+    children: [
+      {
+        path: "/dashboard",
+        element: "Dashboard Landing page",
+        errorElement: "error occur in dashboard",
+      },
+    ],
   },
 
   {
@@ -38,11 +61,6 @@ export const mainroutes = createBrowserRouter([
   },
 
   {
-    path: "/profile-pic",
-    element: <ProfilePic />,
-    errorElement: "error",
-  },
-  {
     path: "/describe",
     element: <Describe />,
     errorElement: "error",
@@ -51,12 +69,6 @@ export const mainroutes = createBrowserRouter([
   {
     path: "/set-username",
     element: <SetUsername />,
-    errorElement: "error",
-  },
-
-  {
-    path: "/set-theme",
-    element: <Theme />,
     errorElement: "error",
   },
 ]);

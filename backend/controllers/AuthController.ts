@@ -94,7 +94,7 @@ export const register = async (req: Request, res: Response) => {
           .session(session);
         const userAndProfileJSON = JSON.stringify(userAndProfile);
 
-        res.cookie("user", userAndProfileJSON);
+        res.cookie("user", userAndProfileJSON, {});
         await session.commitTransaction();
 
         session.endSession();
