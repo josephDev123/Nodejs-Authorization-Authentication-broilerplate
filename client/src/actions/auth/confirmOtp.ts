@@ -1,6 +1,6 @@
 import { redirect } from "react-router-dom";
-import { axiosInstance } from "../auth.ts/axiosInstance";
-import { errorAlert } from "../utils/errorAlert";
+import { axiosInstance } from "../../auth.ts/axiosInstance";
+import { errorAlert } from "../../utils/errorAlert";
 import Cookies from "js-cookie";
 
 interface sendOtpProps {

@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
-import { registerAction } from "./actions/registerAction";
-import { loginAction } from "./actions/loginAction";
-import { ConfirmOtp } from "./actions/confirmOtp";
+import { registerAction } from "./actions/auth/registerAction";
+import { loginAction } from "./actions/auth/loginAction";
+import { ConfirmOtp } from "./actions/auth/confirmOtp";
 import Otp from "./components/pages/otp/Otp";
 import ProfilePic from "./components/pages/Profile-pic/ProfilePic";
 import Describe from "./components/pages/Describe";
@@ -11,7 +11,7 @@ import SetUsername from "./components/pages/setUsername/SetUsername";
 import Theme from "./components/pages/theme/Theme";
 import HomeLayout from "./components/pages/Home/HomeLayout";
 import DashboardLayout from "./components/pages/Dashboard/DashboardLayout";
-import { verifyUserStatus } from "./actions/verifyUserStatus";
+import { verifyUserStatus } from "./actions/auth/verifyUserStatus";
 
 export const mainroutes = createBrowserRouter([
   {

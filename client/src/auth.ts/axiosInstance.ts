@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCookie } from "../utils/getCookie";
+import { getCredential } from "../utils/getCredential";
 
 export const axiosInstance = axios.create({
   baseURL: "http://localhost:7000/",
@@ -11,5 +11,7 @@ export const axiosDefault = axios.create({
   withCredentials: true,
 });
 
-const cookie = getCookie("token");
-axiosDefault.defaults.headers.common["Authorization"] = `Bearer  ${cookie}`;
+const { tokenData } = getCredential();
+axiosDefault.defaults.headers.common[
+  "Authorization"
+] = `Bearer  ${tokenData.name}`;

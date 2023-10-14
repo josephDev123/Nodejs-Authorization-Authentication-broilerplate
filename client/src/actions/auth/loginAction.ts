@@ -1,5 +1,5 @@
-import { axiosInstance } from "../auth.ts/axiosInstance";
-import { errorAlert } from "../utils/errorAlert";
+import { axiosInstance } from "../../auth.ts/axiosInstance";
+import { errorAlert } from "../../utils/errorAlert";
 import { AxiosError } from "axios";
 
 export interface loginActionProps {

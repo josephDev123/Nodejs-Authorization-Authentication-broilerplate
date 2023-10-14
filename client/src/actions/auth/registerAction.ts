@@ -1,6 +1,6 @@
-import { axiosInstance } from "../auth.ts/axiosInstance";
+import { axiosInstance } from "../../auth.ts/axiosInstance";
 import { AxiosError } from "axios";
-import { errorAlert } from "../utils/errorAlert";
+import { errorAlert } from "../../utils/errorAlert";
 
 export interface registerActionProps {
   request: Request;
