@@ -1,8 +1,7 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
-import { type } from "os";
 
 interface IUserProfile extends Document {
-  user_id: Types.ObjectId;
+  // user_id: Types.ObjectId;
   fullName: string;
   //   email: string;
   phoneNumber: string;
@@ -17,19 +16,19 @@ interface IUserProfile extends Document {
   dateOfBirth: Date;
   photo?: string;
   identification?: string;
-  accountBalance: number;
+  // accountBalance: number;
   //   transactions: Types.ObjectId[];
   //   linkedBankAccounts: Types.ObjectId[];
 }
 
 const userProfileSchema = new Schema<IUserProfile>(
   {
-    user_id: {
-      type: Schema.Types.ObjectId,
-      ref: "User", // Reference to the User model
-      required: true,
-      unique: true,
-    },
+    // user_id: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "User", // Reference to the User model
+    //   required: true,
+    //   unique: true,
+    // },
     fullName: {
       type: String,
       // required: true,
@@ -62,10 +61,10 @@ const userProfileSchema = new Schema<IUserProfile>(
     },
     photo: String,
     identification: String,
-    accountBalance: {
-      type: Number,
-      default: 0,
-    },
+    // accountBalance: {
+    //   type: Number,
+    //   default: 0,
+    // },
     // transactions: [
     //   {
     //     type: Schema.Types.ObjectId,

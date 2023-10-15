@@ -6,7 +6,9 @@ export const verifyUserStatus = async () => {
     const { userData } = getCredential();
     const { user } = userData;
 
-    if (!user?.confirm_otp) {
+    if (!user) {
+      return redirect("/login");
+    } else if (!user?.confirm_otp) {
       return redirect("/confirm-otp");
     } else {
       return "hello";

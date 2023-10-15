@@ -2,8 +2,8 @@ import { Link, Outlet } from "react-router-dom";
 
 export default function HomeLayout({}: {}) {
   return (
-    <div className="flex  flex-col ">
-      <div className="flex justify-between px-10">
+    <div className="flex  flex-col px-10">
+      <div className="flex justify-between ">
         <div>
           <ul className="flex gap-2 justify-center">
             <li>
@@ -21,8 +21,11 @@ export default function HomeLayout({}: {}) {
             </li>
           </ul>
         </div>
-
-        <Link to={"/dashboard"}>Dashboard</Link>
+        <span className="flex gap-2">
+          <Link to={"/register"}>Register</Link>
+          <Link to={"/login"}>Login</Link>
+          <Link to={"/dashboard"}>Dashboard</Link>
+        </span>
       </div>
       <Outlet />
     </div>

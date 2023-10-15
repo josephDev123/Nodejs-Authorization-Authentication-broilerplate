@@ -1,5 +1,5 @@
 import { redirect } from "react-router-dom";
-import { axiosInstance } from "../../auth.ts/axiosInstance";
+import { axiosInstance } from "../../axios/axiosInstance";
 import { errorAlert } from "../../utils/errorAlert";
 import Cookies from "js-cookie";
 

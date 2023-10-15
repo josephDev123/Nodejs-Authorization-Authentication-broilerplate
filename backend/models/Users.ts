@@ -5,7 +5,7 @@ type userType = {
   email: string;
   password: string;
   username: string;
-  profile: Types.ObjectId;
+  profile_id: Types.ObjectId;
   otp: string;
   confirm_otp: boolean;
   staging: number;
@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema<userType>({
     },
   },
 
-  profile: {
+  profile_id: {
     type: Schema.Types.ObjectId,
     ref: "UserProfile",
   },

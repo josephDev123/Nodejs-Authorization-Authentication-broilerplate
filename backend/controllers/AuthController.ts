@@ -20,109 +20,84 @@ import { sendMail } from "../utils/sendMail";
 import { generateRandomPIN } from "../utils/generateRandomPin";
 
 export const register = async (req: Request, res: Response) => {
-  const session = await mongoose.startSession();
-
   try {
-    const transactions = await session.withTransaction(async () => {
-      const { email, name, password } = req.body;
-      const hashedPassword = await hashPassword(password);
-      const isPasswordAlreadyUsed = await isPasswordAlreadyTaken(password);
-      const isEmailUsed = await isEmailAlreadyUsed(email);
+    const { email, name, password } = req.body;
+    const hashedPassword = await hashPassword(password);
+    const isPasswordAlreadyUsed = await isPasswordAlreadyTaken(password);
+    const isEmailUsed = await isEmailAlreadyUsed(email);
 
-      const validationResult = await registercredentialValidation(
-        name,
-        email,
-        password
+    const validationResult = await registercredentialValidation(
+      name,
+      email,
+      password
+    );
+
+    if (validationResult.error) {
+      // Handle validation error
+      return res.json({
+        error: true,
+        showMessage: true,
+        message: validationResult.error.message,
+      });
+    }
+
+    // console.log(isPasswordAlreadyUsed, isEmailUsed, hashedPassword);
+
+    if (isPasswordAlreadyUsed === false && isEmailUsed === false) {
+      const newUser = new UserModel({
+        name: name,
+        email: email,
+        password: hashedPassword,
+        profile_id: new mongoose.Types.ObjectId(),
+      });
+      const user = await newUser.save();
+
+      // send otp to mail
+      const otp = generateRandomPIN();
+      const payload = { email: email, otp: otp };
+      const updatedValue = `${otp}`;
+      const storedOtp = await UserModel.updateOne(
+        { _id: user._id },
+        { otp: updatedValue }
       );
 
-      if (validationResult.error) {
-        // Handle validation error
-        return res.json({
-          error: true,
-          showMessage: true,
-          message: validationResult.error.message,
-        });
-      }
-
-      // console.log(isPasswordAlreadyUsed, isEmailUsed, hashedPassword);
-
-      if (isPasswordAlreadyUsed === false && isEmailUsed === false) {
-        const newUser = new UserModel({
-          name: name,
-          email: email,
-          password: hashedPassword,
-        });
-        const user = await newUser.save({ session });
-
-        const userProfile = new UserProfile({
-          user_id: user._id,
-        });
-        await userProfile.save({ session });
-
-        const newUserWithProfile = await UserModel.updateOne(
-          { _id: user._id },
-          { profile: userProfile._id }
-        ).session(session);
-
-        // send otp to mail
-        const otp = generateRandomPIN();
-        const payload = { email: email, otp: otp };
-        // const messageId = await sendMail(payload);
-        const updatedValue = `${otp}`;
-        const storedOtp = await UserModel.updateOne(
-          { _id: user._id },
-          { otp: updatedValue }
-        ).session(session);
-
-        if (storedOtp) {
-          // Email sent successfully
-          await sendMail(payload);
-          console.log("Email sent successfully!");
-        } else {
-          // Handle the case where sending the email failed
-
-          console.log("Failed to send otp email");
-          return res.status(500).json({
-            error: true,
-            showMessage: true,
-            message: "Failed to send otp email",
-          });
-        }
-
-        const userAndProfile = await UserModel.findOne({ email })
-          // .populate("profile")
-          .session(session);
-        const userAndProfileJSON = JSON.stringify(userAndProfile);
-
-        res.cookie("user", userAndProfileJSON, {});
-        await session.commitTransaction();
-
-        session.endSession();
-
-        return res.status(201).json({
-          error: false,
-          showMessage: true,
-          message: "New user created",
-          // data: userAndProfile,
-        });
+      if (storedOtp) {
+        // Email sent successfully
+        await sendMail(payload);
+        console.log("Email sent successfully!");
       } else {
-        session.endSession();
-        console.log("Already registered");
-        return res.status(400).json({
+        // Handle the case where sending the email failed
+        console.log("Failed to send otp email");
+        return res.status(500).json({
           error: true,
           showMessage: true,
-          message: "Already registered",
+          message: "Failed to send otp email",
         });
       }
-    }); //secure:true, httpOnly:true
 
-    if (transactions) {
-      console.log("The transaction was successful");
+      const userAndProfile = await UserModel.findOne({ email });
+
+      const userAndProfileJSON = JSON.stringify(userAndProfile);
+
+      res.cookie("user", userAndProfileJSON, {});
+
+      return res.status(201).json({
+        error: false,
+        showMessage: true,
+        message: "New user created",
+        // data: userAndProfile,
+      });
+    } else {
+      // session.endSession();
+      console.log("Already registered");
+      return res.status(400).json({
+        error: true,
+        showMessage: true,
+        message: "Already registered",
+      });
     }
   } catch (error) {
-    // await session.abortTransaction();
-    console.log("Oops");
-    session.endSession();
+    console.log(error);
     return res.json({
       error: true,
       showMessage: false,

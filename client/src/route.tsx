@@ -1,16 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
-import Login from "./components/pages/Login";
-import Register from "./components/pages/Register";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
 import { registerAction } from "./actions/auth/registerAction";
 import { loginAction } from "./actions/auth/loginAction";
 import { ConfirmOtp } from "./actions/auth/confirmOtp";
-import Otp from "./components/pages/otp/Otp";
-import ProfilePic from "./components/pages/Profile-pic/ProfilePic";
-import Describe from "./components/pages/Describe";
-import SetUsername from "./components/pages/setUsername/SetUsername";
-import Theme from "./components/pages/theme/Theme";
-import HomeLayout from "./components/pages/Home/HomeLayout";
-import DashboardLayout from "./components/pages/Dashboard/DashboardLayout";
+import Otp from "./pages/otp/Otp";
+import ProfilePic from "./pages/Profile-pic/ProfilePic";
+import SetUsername from "./pages/setUsername/SetUsername";
+import Theme from "./pages/theme/Theme";
+import HomeLayout from "./pages/Home/HomeLayout";
+import DashboardLayout from "./pages/Dashboard/DashboardLayout";
 import { verifyUserStatus } from "./actions/auth/verifyUserStatus";
 
 export const mainroutes = createBrowserRouter([
@@ -58,12 +57,6 @@ export const mainroutes = createBrowserRouter([
     element: <Login />,
     errorElement: "error",
     action: loginAction,
-  },
-
-  {
-    path: "/describe",
-    element: <Describe />,
-    errorElement: "error",
   },
 
   {

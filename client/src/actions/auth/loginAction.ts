@@ -1,4 +1,4 @@
-import { axiosInstance } from "../../auth.ts/axiosInstance";
+import { axiosInstance } from "../../axios/axiosInstance";
 import { errorAlert } from "../../utils/errorAlert";
 import { AxiosError } from "axios";
 
