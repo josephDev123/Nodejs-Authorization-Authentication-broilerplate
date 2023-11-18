@@ -1,6 +1,9 @@
 import { Link, Outlet } from "react-router-dom";
+import { getCredential } from "../../utils/getCredential";
 
 export default function HomeLayout({}: {}) {
+  const { userData } = getCredential();
+  console.log(userData);
   return (
     <div className="flex  flex-col px-10">
       <div className="flex justify-between ">
@@ -22,9 +25,14 @@ export default function HomeLayout({}: {}) {
           </ul>
         </div>
         <span className="flex gap-2">
-          <Link to={"/register"}>Register</Link>
-          <Link to={"/login"}>Login</Link>
-          <Link to={"/dashboard"}>Dashboard</Link>
+          {!(userData?.user?.confirm_otp || userData?.user?.email) ? (
+            <>
+              <Link to={"/register"}>Register</Link>
+              <Link to={"/login"}>Login</Link>
+            </>
+          ) : (
+            <Link to={"/dashboard"}>Dashboard</Link>
+          )}
         </span>
       </div>
       <Outlet />

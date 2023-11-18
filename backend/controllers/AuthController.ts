@@ -10,7 +10,7 @@ import { registercredentialValidation } from "../utils/authDataValidation";
 import { isRegisteredEmail } from "../utils/isRegisteredEmail";
 import { isNameAlreadyReqistered } from "../utils/isNameRegistered";
 import jwt from "jsonwebtoken";
-import { string } from "joi";
+import { exist, string } from "joi";
 import { createToken } from "../utils/createToken";
 import UserProfile from "../models/UserProfile";
 import mongoose from "mongoose";
@@ -211,6 +211,45 @@ export const ConfirmOtp = async (req: Request, res: Response) => {
     }
   } catch (error) {
     return res.status(500).json({
+      error: true,
+      showMessage: false,
+      message: (error as Error).message,
+    });
+  }
+};
+
+export const refresh_token = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  try {
+    //  1. check whether the user exist
+    const userExists = await UserModel.findOne({ email });
+
+    if (userExists) {
+      // The user with the specified email exists
+      // You can add your logic here
+      const token = await createToken(email);
+      res.cookie("token", token);
+      return res.status(200).json({
+        error: false,
+        showMessage: true,
+        message: "token created successful",
+        data: token,
+      });
+    } else {
+      // The user with the specified email does not exist
+      // You can add your logic here
+      return res.status(200).json({
+        error: true,
+        showMessage: false,
+        message: "User doesn't exist",
+        data: "",
+      });
+    }
+  } catch (error) {
+    // Handle any errors, such as a database connection issue
+    console.error(`Error checking if the user exists: ${error}`);
+    return res.status(200).json({
       error: true,
       showMessage: false,
       message: (error as Error).message,
