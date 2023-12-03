@@ -8,7 +8,7 @@ export async function authenticateToken(
   next: NextFunction
 ) {
   try {
-    const tokenHeader = req.headers.authorization;
+    const tokenHeader = req.headers.cookie;
 
     if (!tokenHeader) {
       return res.status(401).json({
@@ -20,24 +20,25 @@ export async function authenticateToken(
     }
 
     const tokenParts = tokenHeader.split(" ");
+    const [tokenCredential, user] = tokenParts;
 
-    if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
-      return res.status(401).json({
-        error: true,
-        showMessage: false,
-        message: "Invalid token format",
-      });
-      next(new Error("Invalid token format"));
-    }
+    // if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
+    //   return res.status(401).json({
+    //     error: true,
+    //     showMessage: false,
+    //     message: "Invalid token format",
+    //   });
+    //   next(new Error("Invalid token format"));
+    // }
 
-    const token = tokenParts[1];
-    // console.log(token);
+    let token = tokenCredential?.split("=")[1];
+    token = token?.slice(0, -1);
 
     // Here you can add code to validate the token, such as checking it against a database or decoding it.
 
     // verify the token
-    const verifyToken = await tokenIsVerify(token);
-    console.log(verifyToken);
+    const verifyToken = await tokenIsVerify(token ? token : "");
+    // console.log(verifyToken);
 
     // If the token is valid, you can proceed to the next middleware or the route handler.
 

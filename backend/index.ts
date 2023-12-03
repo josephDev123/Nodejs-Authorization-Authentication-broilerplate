@@ -27,10 +27,6 @@ const startApp = async () => {
   try {
     await dbConnection();
     app.use("/auth", AuthRoute);
-    app.use("/middleware-testing", authenticateToken, (res: Response) => {
-      console.log("hello world");
-      // return res.status(200).json({ greeting: "hello world" });
-    });
 
     app.listen(process.env.PORT, () => {
       console.log(`listening on port ${process.env.PORT}`);

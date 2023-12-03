@@ -256,3 +256,12 @@ export const refresh_token = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const MiddlewareTesting = async (res: Response, req: Request) => {
+  res.status(200).json({
+    error: false,
+    showMessage: true,
+    message: "hello world from the middleware testing",
+  });
+  return;
+};
