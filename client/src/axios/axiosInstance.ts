@@ -1,34 +1,33 @@
-import axios, {
-  AxiosRequestConfig,
-  AxiosError,
-  AxiosInstance,
-  Axios,
-} from "axios";
+import axios from "axios"; // Axios, // AxiosInstance, // AxiosError, // AxiosRequestConfig,
 
 import { getCredential } from "../utils/getCredential";
 
-const { tokenData } = getCredential();
-
+const { tokenData, userData } = getCredential();
+console.log(tokenData.token);
 export const axiosInstance = axios.create({
   baseURL: "http://localhost:7000/",
   withCredentials: true,
 });
 
 // Initialize your custom Axios instance
-const axiosDefault = axios.create({
+export const axiosDefault = axios.create({
   baseURL: "http://localhost:7000/",
   withCredentials: true,
 });
 
-axiosDefault.defaults.headers.common[
-  "Authorization"
-] = `Bearer ${tokenData.name}`;
+// axiosDefault.defaults.headers.common[
+//   "Authorization"
+// ] = `Bearer ${tokenData.token}`;
 
 // Define a function to refresh the token (customize this for your authentication system)
 const refreshAccessToken = async () => {
   try {
     // Make an API request to your server to refresh the token
-    const response = await axiosDefault.post("/refresh-access-token", {});
+    const response = await axiosDefault.post("/refresh-access-token", {
+      data: {
+        email: userData.email,
+      },
+    });
     return response.data.newToken; // Assuming your response provides the new token
   } catch (error) {
     throw error; // Handle token refresh failure as needed

@@ -11,6 +11,7 @@ import Theme from "./pages/theme/Theme";
 import HomeLayout from "./pages/Home/HomeLayout";
 import DashboardLayout from "./pages/Dashboard/DashboardLayout";
 import { verifyUserStatus } from "./actions/auth/verifyUserStatus";
+import DashboardPage from "./pages/Dashboard/page";
 
 export const mainroutes = createBrowserRouter([
   {
@@ -32,8 +33,10 @@ export const mainroutes = createBrowserRouter([
     loader: verifyUserStatus,
     children: [
       {
-        path: "/dashboard",
-        element: "Dashboard Landing page",
+        index: true,
+        // path: "/dashboard",
+        element: <DashboardPage />,
+        // loader: testMiddleware,
         errorElement: "error occur in dashboard",
       },
     ],
