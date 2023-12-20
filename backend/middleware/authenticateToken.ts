@@ -16,7 +16,7 @@ export async function authenticateToken(
         showMessage: false,
         message: "Missing authorization header",
       });
-      next(new Error("Missing authorization header"));
+      // next(new Error("Missing authorization header"));
     }
 
     const tokenParts = tokenHeader.split(" ");
@@ -38,7 +38,7 @@ export async function authenticateToken(
 
     // verify the token
     const verifyToken = await tokenIsVerify(token ? token : "");
-    console.log(verifyToken);
+    // console.log(verifyToken);
 
     // If the token is valid, you can proceed to the next middleware or the route handler.
 

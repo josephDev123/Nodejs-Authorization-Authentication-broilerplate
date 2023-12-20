@@ -3,7 +3,7 @@ import axios from "axios"; // Axios, // AxiosInstance, // AxiosError, // AxiosRe
 import { getCredential } from "../utils/getCredential";
 
 const { tokenData, userData } = getCredential();
-console.log(tokenData.token);
+// console.log(tokenData.token);
 export const axiosInstance = axios.create({
   baseURL: "http://localhost:7000/",
   withCredentials: true,

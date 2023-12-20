@@ -13,8 +13,9 @@ const DashboardPage = () => {
         url: "auth/middleware-testing",
       });
       const result = testReq.data;
+
       setStatus("success");
-      setData(result);
+      setData(result.message);
     } catch (error) {
       setStatus("error");
       setData("error" + error);
