@@ -145,6 +145,7 @@ export const loginController = async (req: Request, res: Response) => {
       });
     }
     const token = await createToken(email);
+    console.log(token);
     // const user_id = await UserModel.findOne({ email }, "_id");
     // const userProfile = await UserProfile.findOne({
     //   user_id: user_id?._id,
@@ -258,10 +259,20 @@ export const refresh_token = async (req: Request, res: Response) => {
 };
 
 export const MiddlewareTesting = async (res: Response, req: Request) => {
-  res.status(200).json({
-    error: false,
-    showMessage: true,
-    message: "hello world from the middleware testing",
-  });
-  return;
+  try {
+    console.log("testing");
+
+    // return res.json({
+    //   error: false,
+    //   showMessage: true,
+    //   message: "hello world from the middleware testing",
+    // });
+  } catch (error: any) {
+    console.log(error.message);
+    // return res.json({
+    //   error: true,
+    //   showMessage: true,
+    //   message: error.message,
+    // });
+  }
 };

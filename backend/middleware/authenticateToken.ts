@@ -33,12 +33,12 @@ export async function authenticateToken(
 
     let token = tokenCredential?.split("=")[1];
     token = token?.slice(0, -1);
-
+    // console.log(token);
     // Here you can add code to validate the token, such as checking it against a database or decoding it.
 
     // verify the token
     const verifyToken = await tokenIsVerify(token ? token : "");
-    // console.log(verifyToken);
+    console.log(verifyToken);
 
     // If the token is valid, you can proceed to the next middleware or the route handler.
 

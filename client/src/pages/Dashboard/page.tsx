@@ -4,14 +4,15 @@ import { useState } from "react";
 const DashboardPage = () => {
   const [status, setStatus] = useState("");
   const [data, setData] = useState("");
+
   const handleTesting = async () => {
     try {
       setStatus("loading");
       const testReq = await axiosDefault({
         method: "POST",
-        url: "/auth/middleware-testing",
+        url: "auth/middleware-testing",
       });
-      const result = testReq.data();
+      const result = testReq.data;
       setStatus("success");
       setData(result);
     } catch (error) {

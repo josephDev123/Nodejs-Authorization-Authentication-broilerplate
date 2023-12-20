@@ -16,12 +16,12 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 
 export default async function tokenIsVerify(token: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.SECRET as string, (err, decoded) => {
+    jwt.verify(token, process.env.SECRET as string, (err, decoded: any) => {
       if (err) {
         reject(new Error(err.message));
       } else {
-        console.log(decoded);
-        resolve(decoded as string);
+        // console.log(decoded.data);
+        resolve(decoded?.data);
       }
     });
   });
