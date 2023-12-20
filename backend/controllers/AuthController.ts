@@ -162,7 +162,11 @@ export const loginController = async (req: Request, res: Response) => {
       });
     }
 
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      maxAge: 300000,
+      secure: true,
+      httpOnly: true,
+    });
     res.cookie("user", JSON.stringify(user));
     return res.json({
       success: true,
