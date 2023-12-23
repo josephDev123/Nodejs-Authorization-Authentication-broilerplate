@@ -165,9 +165,14 @@ export const loginController = async (req: Request, res: Response) => {
     res.cookie("token", token, {
       maxAge: 300000,
       secure: true,
-      httpOnly: true,
+      httpOnly: false,
     });
     res.cookie("user", JSON.stringify(user));
+    res.cookie("token", token, {
+      maxAge: 300000,
+      secure: true,
+      httpOnly: false,
+    });
     return res.json({
       success: true,
       showMessage: false,
@@ -224,7 +229,7 @@ export const ConfirmOtp = async (req: Request, res: Response) => {
 };
 
 export const refresh_token = async (req: Request, res: Response) => {
-  const { email } = req.body;
+  const { email } = req.query;
 
   try {
     //  1. check whether the user exist
@@ -234,7 +239,12 @@ export const refresh_token = async (req: Request, res: Response) => {
       // The user with the specified email exists
       // You can add your logic here
       const token = await createToken(email);
-      res.cookie("token", token);
+      // console.log(token);
+      res.cookie("token", token, {
+        maxAge: 300000,
+        secure: true,
+        httpOnly: false,
+      });
       return res.status(200).json({
         error: false,
         showMessage: true,
@@ -244,7 +254,7 @@ export const refresh_token = async (req: Request, res: Response) => {
     } else {
       // The user with the specified email does not exist
       // You can add your logic here
-      return res.status(200).json({
+      return res.status(400).json({
         error: true,
         showMessage: false,
         message: "User doesn't exist",

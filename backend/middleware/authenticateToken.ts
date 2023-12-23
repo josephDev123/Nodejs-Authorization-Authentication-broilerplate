@@ -9,9 +9,10 @@ export async function authenticateToken(
 ) {
   try {
     const tokenHeader = req.headers.cookie;
-
+    // const tokenHeader = req.headers.authorization;
+    // console.log(tokenHeader);
     if (!tokenHeader) {
-      return res.status(401).json({
+      return res.status(403).json({
         error: true,
         showMessage: false,
         message: "Missing authorization header",
@@ -20,7 +21,12 @@ export async function authenticateToken(
     }
 
     const tokenParts = tokenHeader.split(" ");
-    const [tokenCredential, user] = tokenParts;
+    // console.log(tokenParts);
+    // const [tokenCredential, user] = tokenParts;
+    const tokenCredential = tokenParts.filter((token) =>
+      token.startsWith("token")
+    );
+    // console.log(tokenCredential);
 
     // if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
     //   return res.status(401).json({
@@ -31,11 +37,19 @@ export async function authenticateToken(
     //   next(new Error("Invalid token format"));
     // }
 
-    let token = tokenCredential?.split("=")[1];
-    token = token?.slice(0, -1);
+    let token = tokenCredential[0]?.split("=")[1];
+
     // console.log(token);
     // Here you can add code to validate the token, such as checking it against a database or decoding it.
 
+    //check if token is present
+    if (!token) {
+      return res.status(403).json({
+        error: true,
+        showMessage: false,
+        message: "token not provided",
+      });
+    }
     // verify the token
     const verifyToken = await tokenIsVerify(token ? token : "");
     // console.log(verifyToken);
@@ -49,13 +63,13 @@ export async function authenticateToken(
     // Handle any errors that occur within the try block here.
     console.log(error.message);
     if (error?.message === "jwt expired") {
-      return res.status(401).json({
+      return res.status(403).json({
         error: true,
         showMessage: false,
         message: "jwt expired",
       });
     } else if (error?.message === "jwt malformed") {
-      return res.status(500).json({
+      return res.status(403).json({
         error: true,
         showMessage: false,
         message: "Json Web Token error",

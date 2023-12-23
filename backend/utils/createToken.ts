@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export const createToken = async (email: string) => {
+export const createToken = async (email: any) => {
   const payload = {
     data: email,
   };
