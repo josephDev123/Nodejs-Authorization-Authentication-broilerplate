@@ -20,8 +20,14 @@ export const mainroutes = createBrowserRouter([
 
     children: [
       {
-        path: "/",
+        // path: "/",
+        index: true,
         element: "welcome",
+        errorElement: "error",
+      },
+      {
+        path: "/contact",
+        element: "Contact page",
         errorElement: "error",
       },
     ],

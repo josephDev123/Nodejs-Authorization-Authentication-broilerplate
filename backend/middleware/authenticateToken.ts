@@ -10,14 +10,13 @@ export async function authenticateToken(
   try {
     const tokenHeader = req.headers.cookie;
     // const tokenHeader = req.headers.authorization;
-    // console.log(tokenHeader);
+
     if (!tokenHeader) {
       return res.status(403).json({
         error: true,
         showMessage: false,
         message: "Missing authorization header",
       });
-      // next(new Error("Missing authorization header"));
     }
 
     const tokenParts = tokenHeader.split(" ");
@@ -27,15 +26,6 @@ export async function authenticateToken(
       token.startsWith("token")
     );
     // console.log(tokenCredential);
-
-    // if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
-    //   return res.status(401).json({
-    //     error: true,
-    //     showMessage: false,
-    //     message: "Invalid token format",
-    //   });
-    //   next(new Error("Invalid token format"));
-    // }
 
     let token = tokenCredential[0]?.split("=")[1];
 
@@ -72,7 +62,7 @@ export async function authenticateToken(
       return res.status(403).json({
         error: true,
         showMessage: false,
-        message: "Json Web Token error",
+        message: "Json Web Token error/improper jwt structure",
       });
     } else {
       return res.status(500).json({
