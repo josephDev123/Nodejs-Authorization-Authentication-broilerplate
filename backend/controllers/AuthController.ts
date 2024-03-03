@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { hashPassword } from "../utils/hashPassword";
 import {
@@ -18,11 +18,17 @@ import { Console, log, profile } from "console";
 import { randomBytes, randomUUID } from "crypto";
 import { sendMail } from "../utils/sendMail";
 import { generateRandomPIN } from "../utils/generateRandomPin";
+import { GlobalErrorHandler } from "../utils/GlobalErrorHandler";
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { email, name, password } = req.body;
-    const hashedPassword = await hashPassword(password);
+
+    // const hashedPassword = await hashPassword(password);
     const isPasswordAlreadyUsed = await isPasswordAlreadyTaken(password);
     const isEmailUsed = await isEmailAlreadyUsed(email);
 
@@ -33,21 +39,22 @@ export const register = async (req: Request, res: Response) => {
     );
 
     if (validationResult.error) {
-      // Handle validation error
-      return res.json({
-        error: true,
-        showMessage: true,
-        message: validationResult.error.message,
-      });
+      const error = new GlobalErrorHandler(
+        "ValidateError",
+        validationResult.error.message,
+        400,
+        true,
+        "error"
+      );
+      next(error);
+      return;
     }
-
-    // console.log(isPasswordAlreadyUsed, isEmailUsed, hashedPassword);
 
     if (isPasswordAlreadyUsed === false && isEmailUsed === false) {
       const newUser = new UserModel({
         name: name,
         email: email,
-        password: hashedPassword,
+        password: password,
         profile_id: new mongoose.Types.ObjectId(),
       });
       const user = await newUser.save();
@@ -66,13 +73,14 @@ export const register = async (req: Request, res: Response) => {
         await sendMail(payload);
         console.log("Email sent successfully!");
       } else {
-        // Handle the case where sending the email failed
-        console.log("Failed to send otp email");
-        return res.status(500).json({
-          error: true,
-          showMessage: true,
-          message: "Failed to send otp email",
-        });
+        const error = new GlobalErrorHandler(
+          "EmailOptError",
+          "Otp Email fail to send",
+          500,
+          true,
+          "error"
+        );
+        return next(error);
       }
 
       const userAndProfile = await UserModel.findOne({ email });
@@ -88,21 +96,25 @@ export const register = async (req: Request, res: Response) => {
         // data: userAndProfile,
       });
     } else {
-      // session.endSession();
-      console.log("Already registered");
-      return res.status(400).json({
-        error: true,
-        showMessage: true,
-        message: "Already registered",
-      });
+      const error = new GlobalErrorHandler(
+        "AuthErrorError",
+        "Already registered",
+        400,
+        true,
+        "error"
+      );
+      return next(error);
     }
-  } catch (error) {
-    console.log(error);
-    return res.json({
-      error: true,
-      showMessage: false,
-      message: (error as Error).message,
-    });
+  } catch (errorObject: any) {
+    // console.log(error);
+    const error = new GlobalErrorHandler(
+      errorObject.name,
+      "Something went wrong",
+      500,
+      false,
+      "error"
+    );
+    return next(error);
   }
 };
 

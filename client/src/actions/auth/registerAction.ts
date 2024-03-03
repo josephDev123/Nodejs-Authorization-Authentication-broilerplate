@@ -21,12 +21,12 @@ export const registerAction = async ({ request }: registerActionProps) => {
     });
 
     const resp = req.data;
-
-    if (resp.error && resp.showMessage) {
+    console.log(resp);
+    if (resp.type === "error" && resp.operational) {
       errorAlert(resp.message);
       return null;
-    } else if (resp.error || resp.showMessage == false) {
-      errorAlert("Something went wrong");
+    } else if (resp.error || resp.operational == false) {
+      errorAlert(resp.message);
       return null;
     } else {
       return (window.location.href = "/confirm-otp");
@@ -34,11 +34,12 @@ export const registerAction = async ({ request }: registerActionProps) => {
   } catch (error) {
     const axiosError = error as AxiosError;
     if (axiosError.response) {
-      errorAlert(axiosError.response.data);
+      console.log(axiosError.response.data);
+      errorAlert(axiosError.response.data?.message);
       return { error: axiosError.response.data };
     }
     if (axiosError.request) {
-      errorAlert(axiosError.request);
+      errorAlert(axiosError.request.message);
       return { error: axiosError.request };
     } else {
       errorAlert("something went wrong");

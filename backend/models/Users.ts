@@ -1,4 +1,6 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
+import * as bcrypt from "bcrypt";
+import { GlobalErrorHandler } from "../utils/GlobalErrorHandler";
 
 type userType = {
   name: string;
@@ -59,5 +61,23 @@ const userSchema = new mongoose.Schema<userType>({
 });
 
 //user model
+
+// middlewares
+
+userSchema.pre("save", async function (next) {
+  try {
+    const saltRounds = 4;
+    this.password = await bcrypt.hash(this.password, saltRounds);
+  } catch (errorObj: any) {
+    const error = new GlobalErrorHandler(
+      errorObj.name,
+      "Something went wrong",
+      500,
+      false,
+      "error"
+    );
+    return next(error);
+  }
+});
 
 export const UserModel = mongoose.model("User", userSchema);
