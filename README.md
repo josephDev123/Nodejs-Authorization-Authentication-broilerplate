@@ -1,3 +1,3 @@
 ## Authorization and Authentication Broilerplate
 
-A starting point Broilerplate for React, Nodejs(Expressjs), Mongodb etc project. It include authentication, and authorization login
+A boilerplate for starting a React, Node.js (Express.js), MongoDB, etc., project. It includes authentication and authorization implementations.
